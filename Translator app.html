@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to Sign Language</title>
+</head>
+<body>
+    <h1>Speech to Sign Language</h1>
+    <button id="startButton">Start Speech Recognition</button>
+    <div id="output"></div>
+
+    <script>
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US'; // Set the language for speech recognition
+        recognition.interimResults = false; // We want final results
+
+        const outputDiv = document.getElementById('output');
+        const startButton = document.getElementById('startButton');
+
+        startButton.addEventListener('click', () => {
+            recognition.start();
+            outputDiv.innerHTML = 'Listening...';
+        });
+
+        recognition.onresult = function(event) {
+            const last = event.results.length - 1;
+            const text = event.results[last][0].transcript;
+
+            // Convert speech to sign language (you need to implement this part)
+            // For demo purpose, let's just display the recognized text
+            outputDiv.innerHTML = `<strong>Recognized Text:</strong> ${text}`;
+        };
+
+        recognition.onspeechend = function() {
+            recognition.stop();
+        };
+
+        recognition.onerror = function(event) {
+            outputDiv.innerHTML = `<span style="color: red;">Error occurred in recognition: ${event.error}</span>`;
+        };
+
+        recognition.onnomatch = function(event) {
+            outputDiv.innerHTML = `<span style="color: red;">No match found</span>`;
+        };
+    </script>
+</body>
+</html>
